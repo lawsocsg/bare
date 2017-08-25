@@ -22,15 +22,18 @@ pages = [
       "title": {{ site_page.title | jsonify }},
       {% if site_page.url == page.url %}
       "content": {{ site_page.content | jsonify }},
-      "text": {{ site_page.content | strip_html | strip_newlines | jsonify }},
       {% else %}
       "content": {{ site_page.content | markdownify | jsonify }},
-      "text": {{ site_page.content | markdownify | strip_html | strip_newlines | jsonify }},
       {% endif %}
       "url": {{ site_page.url | jsonify }}
     }
   {% endfor %}
 ]
+pages.forEach (page) ->
+  stripper = document.createElement "div"
+  stripper.innerHTML = page.content
+  page.text = stripper.textContent || stripper.innerText || ""
+console.log(pages);
 pageUrlIndex = {}
 pages.forEach (page) ->
   pageUrlIndex[page.url] = page
