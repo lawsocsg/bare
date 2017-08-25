@@ -24,10 +24,9 @@
   <body>
     <input type="checkbox" id="menu-toggle" hidden>
     <div class="content">
+
       <nav class="site-nav">
-        <div class="site-search" >
-          <input type="text" placeholder="Type to search">
-        </div>
+        <section class="table-of-contents">
         {% for page in site.pages %}
           {% if page.title %}
             <a class="nav-link" href="{{ page.url | relative_url }}">
@@ -35,6 +34,9 @@
             </a>
           {% endif %}
         {% endfor %}
+        </section>
+        <section class="search-results">
+        </section>
       </nav>
 
       <header class="site-header">
@@ -47,11 +49,13 @@
         </label>
       </header>
 
-      <main class="site-main page-content" aria-label="Content">
+      <main class="site-main page-content" aria-label="Content">        
         {{ content }}
       </main>
+
     </div>
     <script src="/assets/lunr.js"></script>
+    <script src="/assets/search.js"></script>
   </body>
 
 </html>
