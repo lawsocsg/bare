@@ -47,7 +47,11 @@ searchIndexPromise = new Promise (resolve, reject) ->
 
 
 # Turns lunr search results into a simple {title, description, link} array
+snippetSpace = 40
+maxSnippets = 4
+maxResults = 10
 translateLunrResults = (lunrResults) ->
+  lunrResults.slice(0, maxResults);
   lunrResults.map (result) ->
     matchingPage = pageUrlIndex[result.ref]
     snippets = [];
@@ -62,14 +66,23 @@ translateLunrResults = (lunrResults) ->
         for positionIndex of positions
           position = positions[positionIndex]
           # Add to the description the snippet for that match
-          preMatch = matchingPage[field].substring(position[0] - 40, position[0])
-          match = matchingPage[field].substring(position[0], position[0] + position[1])
-          postMatch = matchingPage[field].substring(position[0] + position[1], position[0] + position[1] + 40)
+          preMatch = matchingPage[field].substring(
+            position[0] - snippetSpace, 
+            position[0]
+          )
+          match = matchingPage[field].substring(
+            position[0], 
+            position[0] + position[1]
+          )
+          postMatch = matchingPage[field].substring(
+            position[0] + position[1], 
+            position[0] + position[1] + snippetSpace
+          )
           snippet = '...' + preMatch + '<strong>' + match + '</strong>' + postMatch + '...  '
           snippets.push snippet
-          if (snippets.length >= 4) then break
-        if (snippets.length >= 4) then break
-      if (snippets.length >= 4) then break
+          if (snippets.length >= maxSnippets) then break
+        if (snippets.length >= maxSnippets) then break
+      if (snippets.length >= maxSnippets) then break
     # Build a simple flat object per lunr result
     {
       title: matchingPage.title
