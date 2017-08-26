@@ -59,8 +59,8 @@ pre { margin-bottom: $block-spacing; }
 
 // Lists
 // -----
-ol { list-style: decimal inside; }
-ul { list-style: circle inside; }
+ol { list-style: decimal outside; }
+ul { list-style: circle outside; }
 dl { list-style: none; }
 ol, ul, dl { 
   padding-left: 0; 
