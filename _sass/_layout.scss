@@ -91,12 +91,34 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
       top: 0;
       bottom: 0;
       right: $spacing;
+      display: block;
       height: 1em;
       width: 1em;
       margin-top: auto;
       margin-bottom: auto;
       path { fill: $secondary-text-color; }
     }
+    &.filled .search-icon { display: none; } 
+    .clear-button {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: $spacing;
+      display: none;
+      height: 1em;
+      width: 1em;
+      margin-top: auto;
+      margin-bottom: auto;
+      cursor: pointer;
+      .clear-icon {
+        display: block;
+        height: 1em;
+        width: 1em;
+        path { fill: $secondary-text-color; }
+      }
+      &:hover .clear-icon path { fill: $primary-text-color; }
+    }
+    &.filled .clear-button { display: unset; } 
     input {
       position: absolute;
       display: block;

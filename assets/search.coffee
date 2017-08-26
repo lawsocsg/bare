@@ -14,13 +14,34 @@ siteSearchElement.innerHTML = """
   <path fill="#222222" d="M12.41293 11l4.7982 4.79818-1.41423 1.41422L11 12.39863"/>
 </svg>
 """
+clearButton = document.createElement("label");
+clearButton.classList.add("clear-button");
+clearButton.innerHTML = """
+<svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
+  <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
+  <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
+</svg>
+"""
 searchBoxElement = document.createElement("input")
 searchBoxElement.id = "search-box"
 searchBoxElement.setAttribute("type", "text")
 searchBoxElement.setAttribute("placeholder", "Building search index...")
 searchBoxElement.setAttribute("disabled", "")
+siteSearchElement.prepend(clearButton)
 siteSearchElement.prepend(searchBoxElement)
 siteNavElement.prepend(siteSearchElement)
+clearButton.onclick = -> 
+  searchBoxElement.value = ""
+  searchBoxElement.dispatchEvent(new Event('input', {
+    'bubbles': true
+    'cancelable': true
+  }))
+
+searchBoxElement.oninput = (event) ->
+  if searchBoxElement.value.length > 0
+    siteSearchElement.classList.add "filled"
+  else
+    siteSearchElement.classList.remove "filled"
 
 
 # Data Blob
