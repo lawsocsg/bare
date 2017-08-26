@@ -1,7 +1,6 @@
 ---
 # Jekyll front matter needed to trigger coffee compilation
 ---
-
 # Programmatically add the search box to the site
 # This allows the search box to be hidden if javascript is disabled
 siteNavElement = document.getElementsByClassName("site-nav")[0]
@@ -23,7 +22,6 @@ siteNavElement.prepend(siteSearchElement);
 site = 
   title: {{ site.title | jsonify }}
   url: {{ site.url | jsonify }}
-  
 pages = [
   {% for site_page in site.html_pages %}
     {
@@ -84,7 +82,7 @@ siteHierarchy.subsections = pages.map (page) ->
     component: page
     title: page.title
     url: page.url
-    text: []
+    text: [] # Will be converted into a single string later
     subsections: []
   # Iterate through the html nodes and build the section tree depth first 
   currentSection = root
@@ -109,21 +107,27 @@ siteHierarchy.subsections = pages.map (page) ->
       subsections: []
     currentSection.subsections.push newSection
     currentSection = newSection
-  return root
-
-# A flat list of sections and their associated text
-siteSections = {}
-queue = [siteHierarchy]
-while queue.length > 0
-  section = queue.pop()
-  queue.push.apply(queue, section.subsections.reverse())
-  siteSections[section.url] = section
-Object.values(siteSections).forEach (section) -> 
-  section.component = null
-Object.values(siteSections).forEach (section) -> 
+  return root  
+# Build an index to easily retrive sections by url
+sectionIndex = {}
+stack = [siteHierarchy]
+while stack.length > 0
+  section = stack.pop()
+  stack.push.apply(stack, section.subsections.reverse())
+  sectionIndex[section.url] = section
+# Bake in each section's text into a single string
+Object.values(sectionIndex).forEach (section) -> 
   section.text = section.text.join('')
 
-# Asynchronously build the search index
+
+# Asynchronously build the search index by spawning a web worker
+# Build a serializable array for sending to workers
+serializableSiteSections = Object.values(sectionIndex).map (section) ->
+  serializableSection = Object.assign({}, section)
+  delete serializableSection.parent
+  delete serializableSection.component
+  delete serializableSection.subsections
+  return serializableSection
 searchIndexPromise = new Promise (resolve, reject) ->
   worker = new Worker "/assets/worker.js"
   worker.onmessage = (event) ->
@@ -131,17 +135,18 @@ searchIndexPromise = new Promise (resolve, reject) ->
     resolve lunr.Index.load event.data
   worker.onerror = (error) ->
     Promise.reject(error)
-  worker.postMessage Object.values(siteSections)
+  worker.postMessage serializableSiteSections
 
 
-# Turns lunr search results into a simple {title, description, link} array
+# Helper function to translate lunr search results 
+# Returns a simple {title, description, link} array
 snippetSpace = 40
 maxSnippets = 4
 maxResults = 10
 translateLunrResults = (lunrResults) ->
   lunrResults.slice(0, maxResults);
-  lunrResults.map (result) ->
-    matchedDocument = siteSections[result.ref]
+  return lunrResults.map (result) ->
+    matchedDocument = sectionIndex[result.ref]
     snippets = [];
     # Loop over matching terms
     for term of result.matchData.metadata
@@ -149,7 +154,7 @@ translateLunrResults = (lunrResults) ->
       fields = result.matchData.metadata[term]
       for field of fields
         positions = fields[field].position
-        positions = positions.slice(0, 1)
+        positions = positions.slice(0, 3)
         # Loop over the position within each field
         for positionIndex of positions
           position = positions[positionIndex]
@@ -172,7 +177,7 @@ translateLunrResults = (lunrResults) ->
         if (snippets.length >= maxSnippets) then break
       if (snippets.length >= maxSnippets) then break
     # Build a simple flat object per lunr result
-    {
+    return {
       title: matchedDocument.title
       description: snippets.join('');
       url: matchedDocument.url
