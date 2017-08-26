@@ -228,7 +228,28 @@ searchIndexPromise.then (searchIndex) ->
     else
       toc.setAttribute 'hidden', ''
       searchResults.removeAttribute 'hidden'
-      lunrResults = searchIndex.search(query+"*")
       lunrResults = searchIndex.search(query + "~1")
       results = translateLunrResults(lunrResults)
       renderSearchResults results
+
+# Table of contents rendering
+tocElement = document.getElementsByClassName("table-of-contents")[0]
+tocElement.innerHTML = ""
+buildNav = (section) ->
+  navBranch = document.createElement('div')
+  navBranch.classList.add('nav-branch')
+  if section.subsections.length > 0 
+    navBranch.classList.add('can-expand')
+  navBranch.onclick = (event) -> 
+    @classList.toggle("expanded")
+    event.stopPropagation()
+  navLinkElement = document.createElement('a')
+  navLinkElement.classList.add('nav-link')
+  navLinkElement.setAttribute('href', section.url)
+  navLinkElement.innerHTML = section.title
+  navBranch.appendChild(navLinkElement)
+  section.subsections.forEach (section) -> 
+    navBranch.appendChild(buildNav(section))
+  return navBranch
+siteHierarchy.subsections.forEach (section) ->
+  tocElement.appendChild(buildNav(section))

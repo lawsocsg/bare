@@ -5,8 +5,7 @@ $large-screen-breakpoint:     1024px;
 $spacing:                     15px;
 $large-spacing:               2 * $spacing;
 $content-width:               50em;
-$sidebar-content-width:       10em;
-$large-sidebar-content-width: 15em;
+$sidebar-content-width:       12em;
 
 // Implementation
 // ============================================================================
@@ -17,12 +16,7 @@ $large-sidebar-content-width: 15em;
   @media (min-width: $large-screen-breakpoint) { @content; } 
 }
 $site-header-height: calc(2 * #{$spacing} + 1em);
-$site-nav-width: calc(
-  #{$sidebar-content-width} + 2 * #{$spacing}
-);
-$large-site-nav-width: calc(
-  #{$large-sidebar-content-width} + 2 * #{$large-spacing}
-);
+$site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
 
 // Body
 // ----
@@ -31,11 +25,10 @@ $large-site-nav-width: calc(
   display: flex;
   box-sizing: border-box;
   @include medium-screen { padding-left: $site-nav-width; }
-  @include large-screen { padding-left: $large-site-nav-width; }
+  // For showing the sidebar on mobile we just shift the whole content right
   #menu-toggle:checked ~ & { 
     transform: translate($site-nav-width);
     @include medium-screen { transform: none; padding-left: 0; }
-    @include large-screen { transform: none; padding-left: 0; }
   }
   // Other
   flex-direction: column;
@@ -59,9 +52,7 @@ $large-site-nav-width: calc(
     cursor: pointer;
     .menu-icon {
       display: block;
-      svg path {
-        fill: $primary-text-color;
-      }
+      svg path { fill: $primary-text-color; }
     }    
   }
 }
@@ -73,32 +64,21 @@ $large-site-nav-width: calc(
   position: fixed;
   top: 0;
   right: 100%;
+  // On larger screens the content stays in place and we move the sidebar in
   @include medium-screen { left: 0; right: unset; }
   #menu-toggle:checked ~ * & { 
     @include medium-screen { left: unset; right: 100%; }
-    @include large-screen { left: unset; right: 100%; }
-  }
-  #menu-toggle:checked ~ & {
-    margin-left: 0;
   }
   // Box
   display: flex;
   height: 100%;
   width: $site-nav-width;
-  @include large-screen { width: $large-site-nav-width; }
   border-right: 1px solid $divider-color;
   // Appearance
   background-color: #FFF;
   // Other
   flex-direction: column;
-  overflow: scroll;
-  // Rescale the headers for a smaller sidebar
-  h1 { font-size: 1.6rem; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.4rem; }
-  h4 { font-size: 1.3rem; }
-  h5 { font-size: 1.2rem; }
-  h6 { font-size: 1.1rem; }
+  overflow-y: scroll;
   // Children
   .site-search {
     position: relative;
@@ -115,25 +95,44 @@ $large-site-nav-width: calc(
       border: none;
       outline: none;
       font-size: 100%;
-      padding-left: $spacing;
-      padding-right: $spacing;
-      @include large-screen { 
-        padding-left: $large-spacing;
-        padding-right: $large-spacing;
-      }
+      padding-left: $large-spacing;
+      padding-right: $large-spacing;
     }
   }
+
+  .nav-branch {
+    position: relative;
+    &.can-expand:before {
+      position: absolute;
+      top: calc(#{$spacing} - 0.2em); 
+      left: calc(#{$large-spacing}/2 - 1em/2); 
+      color: $secondary-text-color;
+      content: "\25B8";
+      cursor: pointer;
+      font-size: 120%;
+    }
+    & > .nav-branch {
+      display: none;
+      margin-left: $item-spacing;
+      font-size: 90%;
+    }
+    &.expanded {
+      & > .nav-branch { display: block; }
+      &:before { content: "\25BE"; }
+    }
+  }
+
   .nav-link {
     display: block;
     color: $secondary-text-color;
     &.selected { color: $primary-text-color; }
-    padding: $spacing/2 $spacing;
-    @include large-screen { padding: $large-spacing/2 $large-spacing; }
+    padding: $large-spacing/2 $large-spacing;
     text-decoration: none;
     &:hover { background-color: $well-background-color; }
     p {
       margin: $item-spacing/2 0;
       color: $primary-text-color;
+      font-size: 90%;
     }
   }
 
