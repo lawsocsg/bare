@@ -62,8 +62,13 @@ pre { margin-bottom: $block-spacing; }
 ol { list-style: decimal outside; }
 ul { list-style: circle outside; }
 dl { list-style: none; }
+ol, ul {
+  padding-left: 2em;
+}
+dl {
+  padding-left: 0;
+}
 ol, ul, dl { 
-  padding-left: 0; 
   margin-bottom: $block-spacing;
   ol, ul, dl { margin: $item-spacing 0 $item-spacing 2em; }
 }
