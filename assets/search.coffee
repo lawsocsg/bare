@@ -170,7 +170,7 @@ sectionIndex = {}
 stack = [siteHierarchy]
 while stack.length > 0
   section = stack.pop()
-  stack.push.apply(stack, section.subsections.reverse())
+  stack.push.apply(stack, section.subsections.slice().reverse())
   sectionIndex[section.url] = section
   
 # Asynchronously build the search index by spawning a web worker
