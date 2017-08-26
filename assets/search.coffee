@@ -117,8 +117,20 @@ while stack.length > 0
   sectionIndex[section.url] = section
 # Bake in each section's text into a single string
 Object.values(sectionIndex).forEach (section) -> 
-  section.text = section.text.join('')
-
+  section.text = section.text.join('').trim()
+# Compress the tree by merging redundant sections
+# Defined as sections with no text of their own and only 1 sub section
+queue = [siteHierarchy]
+while queue.length > 0
+  section = queue.shift()
+  # Contract 
+  # The parent section effectively consumes the child
+  # And gains the power of TWO sections a la Cell and Android 18
+  while section.subsections.length == 1 and section.text.length == 0
+    section.text += section.subsections[0].text
+    section.subsections = section.subsections[0].subsections
+    section.subsections.forEach (child) -> child.parent = section
+  queue.push.apply queue, section.subsections
 
 # Asynchronously build the search index by spawning a web worker
 # Build a serializable array for sending to workers
