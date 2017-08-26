@@ -14,10 +14,11 @@ console.log "Worker initialized"
     @field 'text'
     @metadataWhitelist = ['position']
     siteSections.forEach (section) =>
-      @add
-        'url': section.url
-        'title': section.title
-        'text': section.text
+      if section.text.length > 0
+        @add
+          'url': section.url
+          'title': section.title
+          'text': section.text
   console.log "Done building index"
   @postMessage index.toJSON()
 
