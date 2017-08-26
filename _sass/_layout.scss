@@ -126,6 +126,7 @@ $large-site-nav-width: calc(
   .nav-link {
     display: block;
     color: $secondary-text-color;
+    &.selected { color: $primary-text-color; }
     padding: $spacing/2 $spacing;
     @include large-screen { padding: $large-spacing/2 $large-spacing; }
     text-decoration: none;

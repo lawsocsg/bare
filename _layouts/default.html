@@ -27,10 +27,13 @@
 
       <nav class="site-nav">
         <section class="table-of-contents">
-        {% for page in site.pages %}
-          {% if page.title %}
-            <a class="nav-link" href="{{ page.url | relative_url }}">
-              {{ page.title | escape }}
+        {% for site_page in site.pages %}
+          {% if site_page.title %}
+            <a 
+              class="nav-link
+                    {% if site_page.url == page.url %}selected{% endif %}"
+              href="{{ site_page.url | relative_url }}">
+              {{ site_page.title | escape }}
             </a>
           {% endif %}
         {% endfor %}
