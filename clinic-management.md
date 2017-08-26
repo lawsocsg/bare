@@ -102,7 +102,7 @@ Singapore 730900
 
 (5 minutes walk from Woodlands MRT station)
 
-![Woodlands MRT Map]({{ assets/woodlands-mrt-map.png | relative_url }})  
+![Woodlands MRT Map]({{ site.url }}/assets/woodlands-mrt-map.png)  
 *Reproduced with permission of SLA.*
 
 Tues (7 – 9.30 pm)
@@ -114,7 +114,7 @@ Singapore 408600
 
 (5 minutes walk from Paya Lebar MRT station)
 
-![Paya Lebar MRT Map]({{ assets/paya-lebar-mrt-map.png | relative_url }})  
+![Paya Lebar MRT Map]({{ site.url }}/assets/paya-lebar-mrt-map.png)
 *Reproduced with permission of SLA.*
 
 Wed (7 – 9.30 pm)
@@ -126,7 +126,7 @@ Singapore 609434
 
 (10 minutes walk from Jurong East MRT station)
 
-![Jurong East MRT Map]({{ assets/jurong-east-mrt-map.png | relative_url }})  
+![Jurong East MRT Map]({{ site.url }}/assets/jurong-east-mrt-map.png)
 *Reproduced with permission of SLA.*
 
 Thurs (7 – 9.30 pm)
@@ -139,7 +139,7 @@ Thurs (7 – 9.30 pm)
 
 (5 minutes walk from Toa Payoh MRT station)
 
-![Toa Payoh MRT Map]({{ assets/toa-payoh-mrt-map.png | relative_url }})  
+![Toa Payoh MRT Map]({{ site.url }}/assets/toa-payoh-mrt-map.png)
 *Reproduced with permission of SLA.*
 
 ## Clinic Checklist for Volunteer Lawyers

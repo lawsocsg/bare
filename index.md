@@ -1,6 +1,6 @@
 # Community Legal Clinic Manual
 
-![logo]({{ /assets/logo.png | relative_url }})
+![logo]({{ site.url }}/assets/logo.png)  
 
 ## Acknowledgements
 
