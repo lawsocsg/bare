@@ -127,6 +127,7 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
     color: $secondary-text-color;
     &.selected { color: $primary-text-color; }
     padding: $large-spacing/2 $large-spacing;
+    cursor: pointer;
     text-decoration: none;
     &:hover { background-color: $well-background-color; }
     p {

@@ -247,6 +247,7 @@ buildNav = (section) ->
   navLinkElement.classList.add('nav-link')
   navLinkElement.setAttribute('href', section.url)
   navLinkElement.innerHTML = section.title
+  navLinkElement.onclick = (event) -> event.stopPropagation()
   navBranch.appendChild(navLinkElement)
   section.subsections.forEach (section) -> 
     navBranch.appendChild(buildNav(section))
