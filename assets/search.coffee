@@ -247,7 +247,15 @@ buildNav = (section) ->
   navLinkElement.classList.add('nav-link')
   navLinkElement.setAttribute('href', section.url)
   navLinkElement.innerHTML = section.title
-  navLinkElement.onclick = (event) -> event.stopPropagation()
+  navLinkElement.onclick = (event) -> 
+    event.preventDefault()
+    event.stopPropagation()
+    pages.forEach (page) =>
+      if page.url is this.pathname
+        main = document.getElementsByTagName("main")[0]
+        main.innerHTML = page.content
+        history.pushState(null, null, this.href)
+        if this.hash.length > 0 then window.location = this.hash
   navBranch.appendChild(navLinkElement)
   section.subsections.forEach (section) -> 
     navBranch.appendChild(buildNav(section))
