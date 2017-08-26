@@ -86,6 +86,17 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
     height: $site-header-height;
     border-bottom: 1px solid $divider-color;
     flex: 0 0 auto;
+    .search-icon {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: $spacing;
+      height: 1em;
+      width: 1em;
+      margin-top: auto;
+      margin-bottom: auto;
+      path { fill: $secondary-text-color; }
+    }
     input {
       position: absolute;
       display: block;
@@ -98,6 +109,7 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
       padding-left: $large-spacing;
       padding-right: $large-spacing;
     }
+    input:disabled ~ .search-icon { display: none; }
   }
 
   .nav-branch {

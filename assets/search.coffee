@@ -1,20 +1,30 @@
 ---
 # Jekyll front matter needed to trigger coffee compilation
 ---
+# Search Box Element
+# =============================================================================
 # Programmatically add the search box to the site
 # This allows the search box to be hidden if javascript is disabled
 siteNavElement = document.getElementsByClassName("site-nav")[0]
-siteSearchElement = document.createElement("div");
+siteSearchElement = document.createElement("div")
 siteSearchElement.classList.add("site-search")
-searchBoxElement = document.createElement("input");
-searchBoxElement.id = "search-box";
-searchBoxElement.setAttribute("type", "text");
-searchBoxElement.setAttribute("placeholder", "Building search index...");
-searchBoxElement.setAttribute("disabled", "");
-siteSearchElement.prepend(searchBoxElement);
-siteNavElement.prepend(siteSearchElement);
+siteSearchElement.innerHTML = """
+<svg class="search-icon" viewBox="0 0 18 18" width="18" height="18">
+  <path ill="#222222" d="M12.43 11.73C13.41 10.59 14 9.11 14 7.5 14 3.91 11.09 1 7.5 1S1 3.91 1 7.5 3.91 14 7.5 14c1.61 0 3.09-.59 4.23-1.57l.7-.7zM7.5 12C5.01 12 3 9.99 3 7.5S5.01 3 7.5 3 12 5.01 12 7.5 9.99 12 7.5 12z"/>
+  <path fill="#222222" d="M12.41293 11l4.7982 4.79818-1.41423 1.41422L11 12.39863"/>
+</svg>
+"""
+searchBoxElement = document.createElement("input")
+searchBoxElement.id = "search-box"
+searchBoxElement.setAttribute("type", "text")
+searchBoxElement.setAttribute("placeholder", "Building search index...")
+searchBoxElement.setAttribute("disabled", "")
+siteSearchElement.prepend(searchBoxElement)
+siteNavElement.prepend(siteSearchElement)
 
 
+# Data Blob
+# =============================================================================
 # The main "blob" of site data constructed by liquid
 # We cherry pick to minimize size
 # Also because jsonify doesn't work quite right and collapses the page objects
@@ -40,6 +50,8 @@ pageIndex = {}
 pages.forEach (page) -> pageIndex[page.url] = page
 
 
+# Site Hierarchy
+# =============================================================================
 # Helper function which returns a flat list of header and text nodes
 HEADER_TAGS = ["H1", "H2", "H3", "H4", "H5", "H6"]
 getHeadersAndText = (root)->
@@ -109,17 +121,15 @@ siteHierarchy.subsections = pages.map (page) ->
       subsections: []
     currentSection.subsections.push newSection
     currentSection = newSection
-  return root  
-# Build an index to easily retrive sections by url
-sectionIndex = {}
-stack = [siteHierarchy]
-while stack.length > 0
-  section = stack.pop()
-  stack.push.apply(stack, section.subsections.reverse())
-  sectionIndex[section.url] = section
+  return root 
+
 # Bake in each section's text into a single string
-Object.values(sectionIndex).forEach (section) -> 
+queue = [siteHierarchy]
+while queue.length > 0
+  section = queue.shift()
   section.text = section.text.join('').trim()
+  queue.push.apply queue, section.subsections
+
 # Compress the tree by merging redundant sections
 # Defined as sections with no text of their own and only 1 sub section
 queue = [siteHierarchy]
@@ -134,6 +144,14 @@ while queue.length > 0
     section.subsections.forEach (child) -> child.parent = section
   queue.push.apply queue, section.subsections
 
+# Build an index to easily retrive sections by url
+sectionIndex = {}
+stack = [siteHierarchy]
+while stack.length > 0
+  section = stack.pop()
+  stack.push.apply(stack, section.subsections.reverse())
+  sectionIndex[section.url] = section
+  
 # Asynchronously build the search index by spawning a web worker
 # Build a serializable array for sending to workers
 serializableSiteSections = Object.values(sectionIndex).map (section) ->
@@ -151,7 +169,8 @@ searchIndexPromise = new Promise (resolve, reject) ->
     Promise.reject(error)
   worker.postMessage serializableSiteSections
 
-
+# Search
+# =============================================================================
 # Helper function to translate lunr search results 
 # Returns a simple {title, description, link} array
 snippetSpace = 40
@@ -234,6 +253,8 @@ searchIndexPromise.then (searchIndex) ->
       results = translateLunrResults(lunrResults)
       renderSearchResults results
 
+# Table of Contents
+# =============================================================================
 # Table of contents rendering
 tocElement = document.getElementsByClassName("table-of-contents")[0]
 tocElement.innerHTML = ""
@@ -256,7 +277,8 @@ buildNav = (section) ->
 siteHierarchy.subsections.forEach (section) ->
   tocElement.appendChild(buildNav(section))
 
-
+# HTML5 History
+# =============================================================================
 # Setup HTML 5 history for single page goodness
 main = document.getElementsByTagName("main")[0]
 document.body.addEventListener("click", (event) ->
