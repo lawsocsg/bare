@@ -36,6 +36,8 @@ pages = [
     }
   {% endfor %}
 ]
+pageIndex = {}
+pages.forEach (page) -> pageIndex[page.url] = page
 
 
 # Helper function which returns a flat list of header and text nodes
@@ -247,18 +249,44 @@ buildNav = (section) ->
   navLinkElement.classList.add('nav-link')
   navLinkElement.setAttribute('href', section.url)
   navLinkElement.innerHTML = section.title
-  navLinkElement.onclick = (event) -> 
-    event.preventDefault()
-    event.stopPropagation()
-    pages.forEach (page) =>
-      if page.url is this.pathname
-        main = document.getElementsByTagName("main")[0]
-        main.innerHTML = page.content
-        history.pushState(null, null, this.href)
-        if this.hash.length > 0 then window.location = this.hash
+  # navLinkElement.onclick = (event) -> 
+  #   event.preventDefault()
+  #   event.stopPropagation()    
+  #   pages.forEach (page) =>
+  #     if page.url is this.pathname
+  #       main = document.getElementsByTagName("main")[0]
+  #       main.innerHTML = page.content
+  #       history.pushState(null, null, this.href)
+  #       if this.hash.length > 0 then window.location = this.hash
+
   navBranch.appendChild(navLinkElement)
   section.subsections.forEach (section) -> 
     navBranch.appendChild(buildNav(section))
   return navBranch
 siteHierarchy.subsections.forEach (section) ->
   tocElement.appendChild(buildNav(section))
+
+
+# Setup HTML 5 history for single page goodness
+main = document.getElementsByTagName("main")[0]
+document.body.addEventListener("click", (event) ->
+  # Check if its within an anchor tag any any point
+  # Traverse up its click tree and see if it affects any of them
+  # If it does not find anything it just terminates as a null
+  anchor = event.target
+  while (anchor? and anchor.tagName isnt "A") 
+    anchor = anchor.parentNode
+  if anchor? and anchor.host is window.location.host
+    event.preventDefault()
+    event.stopPropagation()
+    page = pageIndex[anchor.pathname]
+    main.innerHTML = page.content
+    history.pushState(null, null, anchor.href)
+    if anchor.hash.length > 0 then window.location = anchor.hash
+, true)
+# Map the popstate event
+window.addEventListener "popstate", (event) ->
+  page = pageIndex[window.location.pathname]
+  main.innerHTML = page.content
+  if window.location.hash.length > 0
+    window.location = window.location.hash
