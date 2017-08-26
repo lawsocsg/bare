@@ -7,18 +7,18 @@ importScripts "/assets/lunr.js"
 console.log "Worker initialized"
 @onmessage = (event) => 
   console.log "Starting to build index"
-  pages = event.data
+  siteSections = event.data
   index = lunr ->
     @ref 'url'
     @field 'title', boost: 10
     @field 'text'
     @metadataWhitelist = ['position']
-    pages.forEach (page) =>
+    siteSections.forEach (section) =>
       @add
-        'url': page.url
-        'title': page.title
-        'text': page.text
-  console.log "Done build index"
+        'url': section.url
+        'title': section.title
+        'text': section.text
+  console.log "Done building index"
   @postMessage index.toJSON()
 
 
