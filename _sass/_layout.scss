@@ -107,7 +107,8 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
       outline: none;
       font-size: 100%;
       padding-left: $large-spacing;
-      padding-right: $large-spacing;
+      // Make room for the search icon
+      padding-right: calc(#{$spacing} + 1em);
     }
     input:disabled ~ .search-icon { display: none; }
   }
