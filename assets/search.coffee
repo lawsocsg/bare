@@ -182,7 +182,7 @@ serializableSiteSections = Object.values(sectionIndex).map (section) ->
   delete serializableSection.subsections
   return serializableSection
 searchIndexPromise = new Promise (resolve, reject) ->
-  worker = new Worker "/assets/worker.js"
+  worker = new Worker({{ "/assets/worker.js" | relative_url }})
   worker.onmessage = (event) ->
     worker.terminate()
     resolve lunr.Index.load event.data
