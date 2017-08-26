@@ -249,16 +249,6 @@ buildNav = (section) ->
   navLinkElement.classList.add('nav-link')
   navLinkElement.setAttribute('href', section.url)
   navLinkElement.innerHTML = section.title
-  # navLinkElement.onclick = (event) -> 
-  #   event.preventDefault()
-  #   event.stopPropagation()    
-  #   pages.forEach (page) =>
-  #     if page.url is this.pathname
-  #       main = document.getElementsByTagName("main")[0]
-  #       main.innerHTML = page.content
-  #       history.pushState(null, null, this.href)
-  #       if this.hash.length > 0 then window.location = this.hash
-
   navBranch.appendChild(navLinkElement)
   section.subsections.forEach (section) -> 
     navBranch.appendChild(buildNav(section))
@@ -279,14 +269,14 @@ document.body.addEventListener("click", (event) ->
   if anchor? and anchor.host is window.location.host
     event.preventDefault()
     event.stopPropagation()
-    page = pageIndex[anchor.pathname]
-    main.innerHTML = page.content
     history.pushState(null, null, anchor.href)
     if anchor.hash.length > 0 then window.location = anchor.hash
+    else window.location = "#"
 , true)
 # Map the popstate event
 window.addEventListener "popstate", (event) ->
   page = pageIndex[window.location.pathname]
-  main.innerHTML = page.content
-  if window.location.hash.length > 0
-    window.location = window.location.hash
+  # Only reflow the main content if necessary
+  testBody = new DOMParser().parseFromString(page.content, "text/html").body;
+  if main.innerHTML.trim() isnt testBody.innerHTML.trim()
+    main.innerHTML = page.content
