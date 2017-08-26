@@ -229,5 +229,6 @@ searchIndexPromise.then (searchIndex) ->
       toc.setAttribute 'hidden', ''
       searchResults.removeAttribute 'hidden'
       lunrResults = searchIndex.search(query+"*")
+      lunrResults = searchIndex.search(query + "~1")
       results = translateLunrResults(lunrResults)
       renderSearchResults results
