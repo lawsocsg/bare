@@ -68,6 +68,7 @@ ol, ul, dl {
   ol, ul, dl { margin: $item-spacing 0 $item-spacing 2em; }
 }
 li, dt, dd, { margin-bottom: $item-spacing; }
+dd + dt { margin-top: $block-spacing; }
 
 // Code
 // ----
