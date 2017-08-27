@@ -22,6 +22,7 @@ body {
 // -----------
 .site-header {
   position: fixed;
+  z-index: 2;
   top: 0;
   left: 0;
   right: 0;
@@ -56,6 +57,7 @@ body {
 .site-nav {
   // Position
   position: fixed;
+  z-index: 1;
   top: 0;
   // Mobile has the sidebar hidden by default
   // Tablets and above have it showing by default
@@ -175,6 +177,7 @@ body {
 // Site Main
 //----------
 .site-main {
+  z-index: 0;
   // On small screens fill the screen with content 
   // Shift everything right when menu is open
   box-sizing: border-box;
