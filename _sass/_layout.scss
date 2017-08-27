@@ -137,14 +137,15 @@ body {
 
   .nav-branch {
     position: relative;
-    &.can-expand:before {
+    .expand-button {
       position: absolute;
-      top: calc(#{$spacing} - 0.2em); 
-      left: calc(#{$large-spacing}/2 - 1em/2); 
+      top: 0;
+      left: 0;
+      padding: calc(#{$spacing} - 0.2em) calc(#{$large-spacing}/2 - 1em/2); 
       color: $secondary-text-color;
-      content: "\25B8";
       cursor: pointer;
       font-size: 120%;
+      &:before { content: "\25B8"; }
     }
     & > .nav-branch {
       display: none;
@@ -153,7 +154,7 @@ body {
     }
     &.expanded {
       & > .nav-branch { display: block; }
-      &:before { content: "\25BE"; }
+      .expand-button:before { content: "\25BE"; }
     }
   }
 

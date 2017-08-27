@@ -283,10 +283,10 @@ buildNav = (section) ->
   navBranch = document.createElement('div')
   navBranch.classList.add('nav-branch')
   if section.subsections.length > 0 
-    navBranch.classList.add('can-expand')
-  navBranch.onclick = (event) -> 
-    @classList.toggle("expanded")
-    event.stopPropagation()
+    expandButton = document.createElement('div');
+    expandButton.classList.add('expand-button')
+    expandButton.onclick = (event) -> navBranch.classList.toggle("expanded")
+    navBranch.appendChild expandButton
   navLinkElement = document.createElement('a')
   navLinkElement.classList.add('nav-link')
   navLinkElement.setAttribute('href', section.url)
