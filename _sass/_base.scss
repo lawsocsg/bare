@@ -18,10 +18,18 @@ $block-spacing:           2.0rem;
 $item-spacing:            1.0rem;
 $inline-spacing:          0.2em;
 $base-border-radius:      0.2rem;
-
+// Breakpoints
+$medium-screen-breakpoint:    768px;
+$large-screen-breakpoint:     1024px;
 
 // Implementation
 // ============================================================================
+@mixin medium-screen() { 
+  @media (min-width: $medium-screen-breakpoint) { @content; } 
+}
+@mixin large-screen() { 
+  @media (min-width: $large-screen-breakpoint) { @content; } 
+}
 
 // Typography Defaults
 // -------------------
@@ -43,12 +51,20 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: $base-font-weight - 100;
   &:first-child { margin-top: 0; }
 }
-h1 { font-size: 4.0rem; margin-top: 2.0 * $block-spacing; }
-h2 { font-size: 3.2rem; margin-top: 1.8 * $block-spacing; }
-h3 { font-size: 2.5rem; margin-top: 1.6 * $block-spacing; }
-h4 { font-size: 2.0rem; margin-top: 1.4 * $block-spacing; }
-h5 { font-size: 1.6rem; margin-top: 1.2 * $block-spacing; }
-h6 { font-size: 1.3rem; margin-top: 1.0 * $block-spacing; }
+h1 { font-size: 2.0rem; margin-top: 2.0 * $block-spacing; }
+h2 { font-size: 1.8rem; margin-top: 1.8 * $block-spacing; }
+h3 { font-size: 1.6rem; margin-top: 1.6 * $block-spacing; }
+h4 { font-size: 1.4rem; margin-top: 1.4 * $block-spacing; }
+h5 { font-size: 1.2rem; margin-top: 1.2 * $block-spacing; }
+h6 { font-size: 1.1rem; margin-top: 1.0 * $block-spacing; }
+@include large-screen {
+  h1 { font-size: 4.0rem; }
+  h2 { font-size: 3.2rem; }
+  h3 { font-size: 2.5rem; }
+  h4 { font-size: 2.0rem; }
+  h5 { font-size: 1.6rem; }
+  h6 { font-size: 1.3rem; }
+}
 
 // Blocks
 // ------
