@@ -1,7 +1,5 @@
 // Variables
 // ============================================================================
-$medium-screen-breakpoint:    768px;
-$large-screen-breakpoint:     1024px;
 $spacing:                     15px;
 $large-spacing:               2 * $spacing;
 $content-width:               50em;
@@ -9,12 +7,6 @@ $sidebar-content-width:       12em;
 
 // Implementation
 // ============================================================================
-@mixin medium-screen() { 
-  @media (min-width: $medium-screen-breakpoint) { @content; } 
-}
-@mixin large-screen() { 
-  @media (min-width: $large-screen-breakpoint) { @content; } 
-}
 $site-header-height: calc(2 * #{$spacing} + 1em);
 $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
 
