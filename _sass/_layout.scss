@@ -103,10 +103,11 @@ body {
       position: absolute;
       top: 0;
       bottom: 0;
-      right: $spacing;
+      right: 0;
       display: none;
       height: 1em;
       width: 1em;
+      padding: $spacing;
       margin-top: auto;
       margin-bottom: auto;
       cursor: pointer;
