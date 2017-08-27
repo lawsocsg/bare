@@ -16,6 +16,7 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
   // Box
   display: flex;
   box-sizing: border-box;
+  padding-top: $site-header-height;
   @include medium-screen { padding-left: $site-nav-width; }
   // For showing the sidebar on mobile we just shift the whole content right
   #menu-toggle:checked ~ & { 
@@ -30,17 +31,19 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
 // Site Header
 // -----------
 .site-header {
+  position: fixed;
+  top: 0;
   // Box
   display: flex;
   box-sizing: border-box;
   height: $site-header-height;
-  width: 100%;
-  padding: $spacing;
+  align-self: start;
   // Other
   flex-direction: row;
   align-items: center;
   // Children
   .menu-button {
+    padding: $spacing;
     cursor: pointer;
     .menu-icon {
       display: block;
@@ -63,6 +66,7 @@ $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
   }
   // Box
   display: flex;
+  box-sizing: border-box;
   height: 100%;
   width: $site-nav-width;
   border-right: 1px solid $divider-color;
