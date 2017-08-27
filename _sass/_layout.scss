@@ -154,7 +154,7 @@ body {
     }
     &.expanded {
       & > .nav-branch { display: block; }
-      .expand-button:before { content: "\25BE"; }
+      > .expand-button:before { content: "\25BE"; }
     }
   }
 
