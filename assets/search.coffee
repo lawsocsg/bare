@@ -302,6 +302,7 @@ siteHierarchy.subsections.forEach (section) ->
 # =============================================================================
 # Setup HTML 5 history for single page goodness
 main = document.getElementsByTagName("main")[0]
+menuToggle = document.getElementById("menu-toggle")
 document.body.addEventListener("click", (event) ->
   # Check if its within an anchor tag any any point
   # Traverse up its click tree and see if it affects any of them
@@ -312,6 +313,9 @@ document.body.addEventListener("click", (event) ->
   if anchor? and anchor.host is window.location.host
     event.preventDefault()
     event.stopPropagation()
+    # Need to hide the menu on mobile
+    # On desktop this conveniently leaves it open which is intended behavior
+    menuToggle.checked = false 
     history.pushState(null, null, anchor.href)
     if anchor.hash.length > 0 then window.location = anchor.hash
     else window.location = "#"
