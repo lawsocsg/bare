@@ -3,3 +3,19 @@ theme: minima
 plugins:
   - jekyll-seo-tag
   - jekyll-coffeescript
+section_order:
+  - Community Legal Clinic Manual
+  - Clinic Management
+  - Civil Claims (General)
+  - Family Law
+  - Bankruptcy and Insolvency
+  - Criminal Law and Procedure
+  - Property
+  - Intellectual Property
+  - Wills, Intestacy, Probate and Administration
+  - Data Protection Law
+  - Advance Medical Directive
+  - Juvenile Issues
+  - Military Law
+  - Alternative Dispute Resolution
+  - The Traffic Court
