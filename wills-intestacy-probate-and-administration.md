@@ -1,6 +1,6 @@
-# Wills, Intestacy, Probate and Administration [^1]
+# Wills, Intestacy, Probate and Administration
 
-## Making a Will
+## Making a Will [^1]
 
 ### What is a Will?
 
