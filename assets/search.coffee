@@ -30,7 +30,7 @@ searchBoxElement.setAttribute("disabled", "")
 siteSearchElement.prepend(clearButton)
 siteSearchElement.prepend(searchBoxElement)
 siteNavElement.prepend(siteSearchElement)
-clearButton.onclick = -> 
+clearButton.onclick = ->
   searchBoxElement.value = ""
   searchBoxElement.dispatchEvent(new Event('input', {
     'bubbles': true
@@ -50,7 +50,7 @@ searchBoxElement.oninput = (event) ->
 # We cherry pick to minimize size
 # Also because jsonify doesn't work quite right and collapses the page objects
 # into just strings when we jsonify the whole site
-site = 
+site =
   title: {{ site.title | jsonify }}
   url: {{ site.url | jsonify }}
 pages = [
@@ -68,6 +68,15 @@ pages = [
   {% endfor %}
 ]
 pageIndex = {}
+pageOrder = [
+  {% for section_title in site.section_order %}
+    {{ section_title | jsonify }}
+  {% endfor %}
+]
+
+if pageOrder.length > 0
+  pages.sort (a, b) -> return if pageOrder.indexOf(a.title) < pageOrder.indexOf(b.title) then -1 else 1
+
 pages.forEach (page) -> pageIndex[page.url] = page
 
 
@@ -79,7 +88,7 @@ getHeadersAndText = (root)->
   walker = document.createTreeWalker(
     root
     NodeFilter.SHOW_ALL
-    acceptNode: (node)-> 
+    acceptNode: (node)->
       # Grab header tags for building a table of contents
       if HEADER_TAGS.indexOf(node.tagName) >= 0
         return NodeFilter.FILTER_ACCEPT
@@ -112,14 +121,14 @@ siteHierarchy = {
 siteHierarchy.subsections = pages.map (page) ->
   body = new DOMParser().parseFromString(page.content, 'text/html').body
   headersAndText = getHeadersAndText(body)
-  root = 
+  root =
     parent: siteHierarchy
     component: page
     title: page.title
     url: page.url
     text: [] # Will be converted into a single string later
     subsections: []
-  # Iterate through the html nodes and build the section tree depth first 
+  # Iterate through the html nodes and build the section tree depth first
   currentSection = root
   headersAndText.forEach (node) ->
     # Text nodes get added under the current header
@@ -127,13 +136,13 @@ siteHierarchy.subsections = pages.map (page) ->
       currentSection.text.push node.textContent
       return
     # If you're bigger then climb the tree till you're not
-    # Then add yourself and drill down 
+    # Then add yourself and drill down
     # #lifeprotips
     while (
-      HEADER_TAGS.indexOf(node.tagName) <= 
+      HEADER_TAGS.indexOf(node.tagName) <=
       HEADER_TAGS.indexOf(currentSection.component.tagName)
     ) then currentSection = currentSection.parent
-    newSection = 
+    newSection =
       parent: currentSection
       component: node
       title: node.textContent
@@ -142,7 +151,7 @@ siteHierarchy.subsections = pages.map (page) ->
       subsections: []
     currentSection.subsections.push newSection
     currentSection = newSection
-  return root 
+  return root
 
 # Bake in each section's text into a single string
 queue = [siteHierarchy]
@@ -156,7 +165,7 @@ while queue.length > 0
 queue = [siteHierarchy]
 while queue.length > 0
   section = queue.shift()
-  # Contract 
+  # Contract
   # The parent section effectively consumes the child
   # And gains the power of TWO sections a la Cell and Android 18
   while section.subsections.length == 1 and section.text.length == 0
@@ -172,7 +181,7 @@ while stack.length > 0
   section = stack.pop()
   stack.push.apply(stack, section.subsections.slice().reverse())
   sectionIndex[section.url] = section
-  
+
 # Asynchronously build the search index by spawning a web worker
 # Build a serializable array for sending to workers
 serializableSiteSections = Object.values(sectionIndex).map (section) ->
@@ -192,7 +201,7 @@ searchIndexPromise = new Promise (resolve, reject) ->
 
 # Search
 # =============================================================================
-# Helper function to translate lunr search results 
+# Helper function to translate lunr search results
 # Returns a simple {title, description, link} array
 snippetSpace = 40
 maxSnippets = 4
@@ -214,15 +223,15 @@ translateLunrResults = (lunrResults) ->
           position = positions[positionIndex]
           # Add to the description the snippet for that match
           preMatch = matchedDocument[field].substring(
-            position[0] - snippetSpace, 
+            position[0] - snippetSpace,
             position[0]
           )
           match = matchedDocument[field].substring(
-            position[0], 
+            position[0],
             position[0] + position[1]
           )
           postMatch = matchedDocument[field].substring(
-            position[0] + position[1], 
+            position[0] + position[1],
             position[0] + position[1] + snippetSpace
           )
           snippet = '...' + preMatch + '<strong>' + match + '</strong>' + postMatch + '...  '
@@ -282,7 +291,7 @@ tocElement.innerHTML = ""
 buildNav = (section) ->
   navBranch = document.createElement('div')
   navBranch.classList.add('nav-branch')
-  if section.subsections.length > 0 
+  if section.subsections.length > 0
     expandButton = document.createElement('div');
     expandButton.classList.add('expand-button')
     expandButton.onclick = (event) -> navBranch.classList.toggle("expanded")
@@ -292,7 +301,7 @@ buildNav = (section) ->
   navLinkElement.setAttribute('href', section.url)
   navLinkElement.innerHTML = section.title
   navBranch.appendChild(navLinkElement)
-  section.subsections.forEach (section) -> 
+  section.subsections.forEach (section) ->
     navBranch.appendChild(buildNav(section))
   return navBranch
 siteHierarchy.subsections.forEach (section) ->
@@ -308,14 +317,14 @@ document.body.addEventListener("click", (event) ->
   # Traverse up its click tree and see if it affects any of them
   # If it does not find anything it just terminates as a null
   anchor = event.target
-  while (anchor? and anchor.tagName isnt "A") 
+  while (anchor? and anchor.tagName isnt "A")
     anchor = anchor.parentNode
   if anchor? and anchor.host is window.location.host
     event.preventDefault()
     event.stopPropagation()
     # Need to hide the menu on mobile
     # On desktop this conveniently leaves it open which is intended behavior
-    menuToggle.checked = false 
+    menuToggle.checked = false
     history.pushState(null, null, anchor.href)
     if anchor.hash.length > 0 then window.location = anchor.hash
     else window.location = "#"
