@@ -1728,12 +1728,12 @@ not your friend, unless their contract states otherwise. In the latter
 case, your friend will have no right to “agree” to you uploading the
 photograph onto your website/blog.
 
-### Copyright for Educators [^8]
+### Copyright for Educators
 
 Copyright impacts educators significantly. This is because educators
 often use copyright works for purposes of teaching. IPOS has prepared a
 special Copyright Infosheet just for educators which is accessible at
-this link [^9].
+this [link](https://www.ipos.gov.sg/docs/default-source/resources-library/copyright/copyright_educators-oct-2012.pdf).
 
 ### Others [^10]
 
@@ -3209,6 +3209,8 @@ against an infringing party, seek relief in the form of an injunction to
 stop the infringing activities, demand for the profits gained by the
 infringing party at his expense or seek damages for the loss suffered.
 
+## References
+
 [^1]: <http://www.wipo.int>
 
 [^2]: <http://www.wto.org>
@@ -3226,12 +3228,6 @@ infringing party at his expense or seek damages for the loss suffered.
 
 [^7]: Extracted from the IPOS website, last updated and verified on 1
     September 2014
-
-[^8]: [http://www.ipos.gov.sg/Portals/0/COPYRIGHT\\\_Educators%20\[Oct%202012\].pdf](http://www.ipos.gov.sg/Portals/0/COPYRIGHT\_Educators%20%5BOct%202012%5D.pdf)
-
-[^9]: <http://www.ifaq.gov.sg/iPOS/apps/fcd_faqmain.aspx#TOPIC_433>,
-    last updated 4 August 2014, last accessed 1 September 2014
-    [http://www.ipos.gov.sg/Portals/0/COPYRIGHT\\\_Educators%20\[Oct%202012\].pdf](http://www.ipos.gov.sg/Portals/0/COPYRIGHT\_Educators%20%5BOct%202012%5D.pdf)
 
 [^10]: <http://www.ifaq.gov.sg/iPOS/apps/fcd_faqmain.aspx#TOPIC_433>,
     last updated 4 August 2014, last accessed 1 September 2014
